@@ -17,10 +17,10 @@ const navItems = [
 ]
 
 const tickerItems = [
-  'Envios a toda Colombia',
-  'Pide por WhatsApp',
-  'Productos de calidad',
-  'Entrega rapida',
+  '🔥 Envios a toda Colombia',
+  '⚽ Pide por WhatsApp ya',
+  '🏆 Productos de calidad garantizada',
+  '⚡ Entrega rapida en Cali',
 ]
 
 export default function Navbar() {
@@ -35,7 +35,6 @@ export default function Navbar() {
               {tickerItems.map((item) => (
                 <span key={`${group}-${item}`}>{item}</span>
               ))}
-              <span className={styles.tickerDot} />
             </div>
           ))}
         </div>
@@ -47,10 +46,10 @@ export default function Navbar() {
             <Image
               className={styles.logo}
               src="/logoprincipal.png"
-              alt=""
+              alt="Pura Pasion Futbol Store"
               fill
-              sizes="(max-width: 560px) 54px, 78px"
-              preload
+              sizes="(max-width: 560px) 54px, 92px"
+              priority
             />
           </span>
           <span className={styles.brandText}>
@@ -68,8 +67,15 @@ export default function Navbar() {
         </nav>
 
         <div className={styles.actions}>
+          <a className={styles.iconButton} href="#buscar" aria-label="Buscar productos">
+            🔍
+          </a>
+          <a className={styles.iconButton} href="#carrito" aria-label="Ver carrito">
+            🛒
+            <span className={styles.cartCount}>0</span>
+          </a>
           <a className={styles.whatsapp} href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-            <span aria-hidden="true">WA</span>
+            <span aria-hidden="true">WhatsApp</span>
             <span className={styles.whatsappText}>Pedir ya</span>
           </a>
           <button
@@ -95,6 +101,9 @@ export default function Navbar() {
             {item.label}
           </Link>
         ))}
+        <a className={styles.mobileWhatsapp} href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+          Comprar por WhatsApp
+        </a>
       </nav>
     </div>
   )

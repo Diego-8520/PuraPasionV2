@@ -14,6 +14,8 @@ const FILTROS_INIT: Filtros = {
   orden: 'reciente',
 }
 
+const FB = { fontFamily: 'var(--font-barlow), sans-serif' }
+
 interface Props {
   productos: Producto[]
 }
@@ -35,7 +37,7 @@ export default function CatalogoProductos({ productos }: Props) {
       if (p.equipos) map.set(p.equipos.id, p.equipos.nombre)
     }
     return Array.from(map, ([id, nombre]) => ({ id, nombre })).sort((a, b) =>
-      a.nombre.localeCompare(b.nombre)
+      a.nombre.localeCompare(b.nombre),
     )
   }, [productos])
 
@@ -57,7 +59,7 @@ export default function CatalogoProductos({ productos }: Props) {
           p.nombre.toLowerCase().includes(q) ||
           p.equipos?.nombre.toLowerCase().includes(q) ||
           p.categorias?.nombre.toLowerCase().includes(q) ||
-          p.badge_manual?.toLowerCase().includes(q)
+          p.badge_manual?.toLowerCase().includes(q),
       )
     }
 
@@ -107,24 +109,31 @@ export default function CatalogoProductos({ productos }: Props) {
 
       {/* Empty state */}
       {productosFiltrados.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 gap-4">
-          <span className="text-7xl" style={{ opacity: 0.25 }}>
-            🔍
-          </span>
+        <div className="flex flex-col items-center justify-center py-28 gap-5">
+          <svg
+            width="52"
+            height="52"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="rgba(239,239,239,0.12)"
+            strokeWidth="1"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="M21 21l-4.35-4.35" />
+          </svg>
           <p
             className="text-center text-sm"
-            style={{ color: '#A0A0A0', fontFamily: 'var(--font-barlow), sans-serif' }}
+            style={{ ...FB, color: '#606060' }}
           >
             No encontramos productos con esos filtros.
           </p>
           <button
             onClick={() => setFiltros(FILTROS_INIT)}
-            className="px-6 py-2.5 rounded-full text-sm font-semibold tracking-wider transition-colors hover:opacity-80"
-            style={{
-              border: '1px solid rgba(204,17,17,0.5)',
-              color: '#CC1111',
-              fontFamily: 'var(--font-barlow), sans-serif',
-            }}
+            className="px-6 py-2.5 rounded-full text-xs font-bold tracking-widest uppercase border border-[#2A2A2A] text-[#EFEFEF] transition-colors hover:border-[#3A3A3A]"
+            style={FB}
           >
             Limpiar filtros
           </button>

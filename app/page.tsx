@@ -1,161 +1,544 @@
-import Link from "next/link";
+import Link from 'next/link'
+import Image from 'next/image'
+import {
+  getProductos,
+  getImagenPrincipal,
+  getPrecioMinimo,
+} from '@/services/productos'
+import ProductCard from '@/components/catalogo/ProductCard'
 
-const equipos = [
-  "AMÉRICA",
-  "NACIONAL",
-  "MILLONARIOS",
-  "REAL MADRID",
-  "BARCELONA",
-  "ARGENTINA",
-  "BRASIL",
-  "COLOMBIA",
-];
+const FD = { fontFamily: 'var(--font-bebas), sans-serif' }
+const FB = { fontFamily: 'var(--font-barlow), sans-serif' }
 
-const beneficios = [
+const BENEFICIOS = [
   {
-    icono: "🚚",
-    titulo: "ENVÍOS A TODA COLOMBIA",
-    texto: "Recibe tus camisetas en casa de forma rápida y segura.",
+    titulo: 'Envíos a Colombia',
+    desc: 'A todo el país',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <rect x="1" y="3" width="15" height="13" rx="1" />
+        <path d="M16 8h4l3 5v3h-7V8z" />
+        <circle cx="5.5" cy="18.5" r="1.5" />
+        <circle cx="18.5" cy="18.5" r="1.5" />
+      </svg>
+    ),
   },
   {
-    icono: "💬",
-    titulo: "PEDIDOS POR WHATSAPP",
-    texto: "Atención directa para confirmar talla, stock y envío.",
+    titulo: 'Pago contraentrega',
+    desc: 'Paga al recibir',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    ),
   },
   {
-    icono: "🔥",
-    titulo: "PRODUCTOS DESTACADOS",
-    texto: "Camisetas de clubes y selecciones para verdaderos hinchas.",
+    titulo: 'Atención WhatsApp',
+    desc: 'Respuesta rápida',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.113.549 4.099 1.51 5.827L0 24l6.335-1.668A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.815 9.815 0 01-5.025-1.372l-.36-.214-3.735.984 1.002-3.636-.236-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z" />
+      </svg>
+    ),
   },
-];
+  {
+    titulo: 'Entrega en Cali',
+    desc: 'Barrio Alcázares',
+    icon: (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+        <circle cx="12" cy="10" r="3" />
+      </svg>
+    ),
+  },
+]
 
-export default function Home() {
+export default async function Home() {
+  const productos = await getProductos().catch(() => [])
+
+  const nuevos = productos.slice(0, 8)
+  const destacados = productos.filter((p) => p.badge_manual).slice(0, 4)
+
+  const categorias = [
+    ...new Map(
+      productos
+        .filter((p) => p.categorias)
+        .map((p) => [p.categorias!.id, p.categorias!]),
+    ).values(),
+  ]
+
+  const heroProducto =
+    productos.find((p) => getImagenPrincipal(p) !== null) ?? productos[0] ?? null
+  const heroImagen = heroProducto ? getImagenPrincipal(heroProducto) : null
+
+  const formatCOP = (n: number) =>
+    new Intl.NumberFormat('es-CO', {
+      style: 'currency',
+      currency: 'COP',
+      minimumFractionDigits: 0,
+    }).format(n)
+
   return (
-    <main className="min-h-screen bg-[#0A0A0A] text-[#F5F5F5]">
-      <section className="relative overflow-hidden border-b border-[#2E2E2E]">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,#CC111133,transparent_45%)]" />
+    <main style={{ background: '#0A0A0A', color: '#EFEFEF' }}>
 
-        <div className="relative mx-auto flex min-h-[85vh] max-w-7xl flex-col items-center justify-center px-4 py-20 text-center">
-          <span className="mb-5 rounded-full border border-[#D4AF37]/50 bg-[#D4AF37]/10 px-5 py-2 text-sm font-bold tracking-[0.25em] text-[#D4AF37]">
-            PURA PASIÓN FÚTBOL STORE
-          </span>
+      {/* ─── HERO ──────────────────────────────────────────────────────── */}
+      <section className="relative border-b border-[#1A1A1A] overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)',
+            backgroundSize: '52px 52px',
+            maskImage: 'linear-gradient(to bottom, black 55%, transparent)',
+          }}
+        />
 
-          <h1 className="max-w-5xl text-5xl font-black uppercase tracking-[0.12em] text-white sm:text-7xl lg:text-8xl">
-            Viste tu pasión
-          </h1>
+        <div className="relative max-w-7xl mx-auto px-6 lg:px-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[58%_42%] gap-12 items-center min-h-[85dvh] py-24">
 
-          <p className="mt-6 max-w-2xl text-lg text-[#A0A0A0] sm:text-xl">
-            Camisetas de fútbol, clubes y selecciones para hinchas que viven el
-            juego con el corazón.
-          </p>
+            {/* Left */}
+            <div className="flex flex-col justify-center">
+              <p
+                className="text-xs font-bold tracking-[4px] uppercase mb-6"
+                style={{ ...FB, color: '#505050' }}
+              >
+                Pura Pasión Fútbol Store — Cali, Colombia
+              </p>
 
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <h1
+                className="text-[#EFEFEF] leading-[0.88]"
+                style={{
+                  ...FD,
+                  fontSize: 'clamp(62px, 9.5vw, 124px)',
+                  letterSpacing: '2px',
+                }}
+              >
+                Para cancha,
+                <br />
+                calle y
+                <br />
+                colección.
+              </h1>
+
+              <p
+                className="mt-6 leading-relaxed max-w-md"
+                style={{ ...FB, color: '#686868', fontSize: '17px' }}
+              >
+                Camisetas de clubes, selecciones y retro. Todos los estilos,
+                todos los equipos, ninguna hinchada de por medio.
+              </p>
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  href="/catalogo"
+                  className="inline-flex items-center px-7 py-3.5 rounded-full text-sm font-bold tracking-widest uppercase transition-all duration-200 hover:opacity-90 active:scale-[0.98]"
+                  style={{ ...FB, background: '#EFEFEF', color: '#0A0A0A' }}
+                >
+                  Explorar catálogo
+                </Link>
+
+                <Link
+                  href="/catalogo"
+                  className="inline-flex items-center px-7 py-3.5 rounded-full text-sm font-bold tracking-widest uppercase border border-[#2A2A2A] hover:border-[#444] transition-all duration-200 active:scale-[0.98]"
+                  style={{ ...FB, color: '#EFEFEF' }}
+                >
+                  Ver novedades
+                </Link>
+              </div>
+
+              {/* Stats bar */}
+              <div className="mt-12 flex items-center gap-8 pt-8 border-t border-[#1A1A1A]">
+                {[
+                  { val: `${productos.length}+`, label: 'Productos' },
+                  { val: '160+', label: 'Equipos' },
+                  { val: 'COL', label: 'Envíos' },
+                ].map((s, i) => (
+                  <div key={s.label} className="flex items-center gap-8">
+                    {i > 0 && (
+                      <div className="w-px h-8 bg-[#1E1E1E]" />
+                    )}
+                    <div>
+                      <p
+                        style={{
+                          ...FD,
+                          fontSize: '28px',
+                          letterSpacing: '1px',
+                          lineHeight: 1,
+                        }}
+                      >
+                        {s.val}
+                      </p>
+                      <p
+                        className="text-xs font-bold tracking-widest uppercase mt-1"
+                        style={{ ...FB, color: '#505050' }}
+                      >
+                        {s.label}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right — hero product image */}
+            <div className="hidden lg:flex items-center justify-end">
+              {heroImagen ? (
+                <div
+                  className="relative overflow-hidden"
+                  style={{
+                    width: '400px',
+                    height: '520px',
+                    borderRadius: '24px',
+                    border: '1px solid #1E1E1E',
+                  }}
+                >
+                  <Image
+                    src={heroImagen}
+                    alt={heroProducto?.nombre ?? 'Producto destacado'}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                    priority
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        'linear-gradient(to top, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.15) 45%, transparent 70%)',
+                    }}
+                  />
+                  {heroProducto && (
+                    <div className="absolute bottom-0 left-0 right-0 p-6">
+                      {heroProducto.badge_manual && (
+                        <span
+                          className="inline-block px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-widest mb-3"
+                          style={{ ...FB, background: '#D4AF37', color: '#0A0A0A' }}
+                        >
+                          {heroProducto.badge_manual}
+                        </span>
+                      )}
+                      <p
+                        className="text-xs font-bold tracking-widest uppercase mb-1"
+                        style={{ ...FB, color: 'rgba(239,239,239,0.45)' }}
+                      >
+                        {heroProducto.equipos?.nombre ??
+                          heroProducto.categorias?.nombre ??
+                          ''}
+                      </p>
+                      <p
+                        style={{
+                          ...FD,
+                          fontSize: '26px',
+                          lineHeight: 1.05,
+                          letterSpacing: '1px',
+                          color: '#EFEFEF',
+                        }}
+                      >
+                        {heroProducto.nombre}
+                      </p>
+                      {getPrecioMinimo(heroProducto) > 0 && (
+                        <p
+                          className="mt-1.5"
+                          style={{
+                            ...FD,
+                            fontSize: '20px',
+                            color: '#EFEFEF',
+                            letterSpacing: '0.5px',
+                          }}
+                        >
+                          {formatCOP(getPrecioMinimo(heroProducto))}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div
+                  style={{
+                    width: '400px',
+                    height: '520px',
+                    borderRadius: '24px',
+                    border: '1px solid #1A1A1A',
+                    background: '#141414',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <svg
+                    width="72"
+                    height="72"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="rgba(239,239,239,0.08)"
+                    strokeWidth="0.75"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 6l-2.5 4H6l2 3.5-1 3.5 5-1.5 5 1.5-1-3.5 2-3.5h-3.5L12 6z" />
+                  </svg>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── CATEGORIES ────────────────────────────────────────────────── */}
+      <section className="border-b border-[#1A1A1A] py-12 px-6">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-end justify-between gap-4 mb-8">
+            <div>
+              <p
+                className="text-xs font-bold tracking-[4px] uppercase mb-2"
+                style={{ ...FB, color: '#505050' }}
+              >
+                Explorar
+              </p>
+              <h2
+                style={{
+                  ...FD,
+                  fontSize: 'clamp(26px, 3.5vw, 38px)',
+                  letterSpacing: '1.5px',
+                }}
+              >
+                Compra por categoría
+              </h2>
+            </div>
             <Link
               href="/catalogo"
-              className="rounded-full bg-[#CC1111] px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#e31818] hover:shadow-[0_0_30px_rgba(204,17,17,0.45)]"
+              className="text-xs font-bold tracking-widest uppercase shrink-0 transition-colors hover:text-[#EFEFEF]"
+              style={{ ...FB, color: '#505050' }}
+            >
+              Ver todo
+            </Link>
+          </div>
+
+          <div className="flex flex-wrap gap-2">
+            {(categorias.length > 0
+              ? categorias.map((c) => ({ id: c.id, nombre: c.nombre }))
+              : ['Clubes', 'Selecciones', 'Retro', 'Entrenamiento', 'Ofertas'].map(
+                  (n) => ({ id: n, nombre: n }),
+                )
+            ).map((cat) => (
+              <Link
+                key={cat.id}
+                href="/catalogo"
+                className="px-5 py-2.5 rounded-full text-sm font-bold tracking-widest uppercase border border-[#242424] hover:border-[#3A3A3A] hover:bg-[#141414] transition-all duration-200"
+                style={{ ...FB, color: '#EFEFEF' }}
+              >
+                {cat.nombre}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── NUEVOS INGRESOS ───────────────────────────────────────────── */}
+      {nuevos.length > 0 && (
+        <section className="py-16 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-end justify-between gap-4 mb-10">
+              <div>
+                <p
+                  className="text-xs font-bold tracking-[4px] uppercase mb-2"
+                  style={{ ...FB, color: '#505050' }}
+                >
+                  Llegaron
+                </p>
+                <h2
+                  style={{
+                    ...FD,
+                    fontSize: 'clamp(26px, 3.5vw, 38px)',
+                    letterSpacing: '1.5px',
+                  }}
+                >
+                  Nuevos ingresos
+                </h2>
+              </div>
+              <Link
+                href="/catalogo"
+                className="text-xs font-bold tracking-widest uppercase shrink-0 transition-colors hover:text-[#EFEFEF]"
+                style={{ ...FB, color: '#505050' }}
+              >
+                Ver todo
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {nuevos.map((p) => (
+                <ProductCard key={p.id} producto={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── BRAND BANNER ──────────────────────────────────────────────── */}
+      <section
+        className="border-y border-[#1A1A1A] py-20 px-6"
+        style={{ background: '#141414' }}
+      >
+        <div className="max-w-5xl mx-auto">
+          <p
+            className="text-xs font-bold tracking-[4px] uppercase mb-5"
+            style={{ ...FB, color: '#505050' }}
+          >
+            Pura Pasión
+          </p>
+          <h2
+            className="text-[#EFEFEF] leading-[0.9]"
+            style={{
+              ...FD,
+              fontSize: 'clamp(38px, 6.5vw, 88px)',
+              letterSpacing: '2px',
+            }}
+          >
+            Ropa futbolera
+            <br />
+            sin casarte con
+            <br />
+            un solo color.
+          </h2>
+          <p
+            className="mt-6 leading-relaxed max-w-lg"
+            style={{ ...FB, color: '#606060', fontSize: '15px' }}
+          >
+            Para la cancha, la calle y la colección. Encuentra tu camiseta por
+            club, selección o estilo sin que tu elección defina tu hinchada.
+          </p>
+          <Link
+            href="/catalogo"
+            className="mt-8 inline-flex items-center px-7 py-3.5 rounded-full text-sm font-bold tracking-widest uppercase border border-[#2A2A2A] hover:border-[#444] hover:bg-[#1E1E1E] transition-all duration-200"
+            style={{ ...FB, color: '#EFEFEF' }}
+          >
+            Explorar tienda
+          </Link>
+        </div>
+      </section>
+
+      {/* ─── MÁS VENDIDOS ──────────────────────────────────────────────── */}
+      {destacados.length > 0 && (
+        <section className="py-16 px-6">
+          <div className="max-w-7xl mx-auto">
+            <div className="flex items-end justify-between gap-4 mb-10">
+              <div>
+                <p
+                  className="text-xs font-bold tracking-[4px] uppercase mb-2"
+                  style={{ ...FB, color: '#505050' }}
+                >
+                  Populares
+                </p>
+                <h2
+                  style={{
+                    ...FD,
+                    fontSize: 'clamp(26px, 3.5vw, 38px)',
+                    letterSpacing: '1.5px',
+                  }}
+                >
+                  Más vendidos
+                </h2>
+              </div>
+              <Link
+                href="/catalogo"
+                className="text-xs font-bold tracking-widest uppercase shrink-0 transition-colors hover:text-[#EFEFEF]"
+                style={{ ...FB, color: '#505050' }}
+              >
+                Ver todo
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {destacados.map((p) => (
+                <ProductCard key={p.id} producto={p} />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ─── EQUIPOS POPULARES ─────────────────────────────────────────── */}
+      <section
+        className="border-t border-[#1A1A1A] py-14 px-6"
+        style={{ background: '#0E0E0E' }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-end justify-between gap-4 mb-8">
+            <div>
+              <p
+                className="text-xs font-bold tracking-[4px] uppercase mb-2"
+                style={{ ...FB, color: '#505050' }}
+              >
+                Busca tu camiseta
+              </p>
+              <h2
+                style={{
+                  ...FD,
+                  fontSize: 'clamp(26px, 3.5vw, 38px)',
+                  letterSpacing: '1.5px',
+                }}
+              >
+                Compra por equipo
+              </h2>
+            </div>
+            <Link
+              href="/catalogo"
+              className="text-xs font-bold tracking-widest uppercase shrink-0 transition-colors hover:text-[#EFEFEF]"
+              style={{ ...FB, color: '#505050' }}
             >
               Ver catálogo
             </Link>
-
-            <a
-              href="https://wa.me/573057510901?text=Hola! Quiero conocer el catálogo de Pura Pasión"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="rounded-full border border-white/30 px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-white transition-all duration-300 hover:-translate-y-1 hover:border-[#25D366] hover:text-[#25D366]"
-            >
-              Pedir por WhatsApp
-            </a>
           </div>
 
-          <div className="mt-14 rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/10 px-6 py-4 text-[#D4AF37]">
-            ★ Tienda futbolera en Cali — envíos a toda Colombia
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+            {['AMÉRICA', 'NACIONAL', 'MILLONARIOS', 'REAL MADRID', 'BARCELONA', 'ARGENTINA', 'BRASIL', 'COLOMBIA'].map(
+              (equipo) => (
+                <Link
+                  key={equipo}
+                  href={`/catalogo?equipo=${encodeURIComponent(equipo)}`}
+                  className="rounded-2xl border border-[#1E1E1E] bg-[#141414] px-4 py-6 text-center text-xs font-bold uppercase tracking-widest hover:border-[#3A3A3A] hover:bg-[#1A1A1A] transition-all duration-200"
+                  style={{ ...FB, color: '#EFEFEF' }}
+                >
+                  {equipo}
+                </Link>
+              ),
+            )}
           </div>
         </div>
       </section>
 
-      <section className="border-b border-[#2E2E2E] bg-[#1E1E1E]">
-        <div className="mx-auto grid max-w-7xl grid-cols-1 gap-4 px-4 py-8 sm:grid-cols-3">
-          {beneficios.map((item) => (
-            <article
-              key={item.titulo}
-              className="rounded-2xl border border-[#2E2E2E] bg-[#0A0A0A] p-6 transition-all duration-300 hover:-translate-y-1 hover:border-[#CC1111]/60"
-            >
-              <div className="text-3xl">{item.icono}</div>
-              <h2 className="mt-4 text-xl font-black tracking-[0.12em] text-white">
-                {item.titulo}
-              </h2>
-              <p className="mt-2 text-sm leading-6 text-[#A0A0A0]">
-                {item.texto}
-              </p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16">
-        <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
-          <div>
-            <span className="text-sm font-black uppercase tracking-[0.25em] text-[#CC1111]">
-              Equipos populares
-            </span>
-            <h2 className="mt-3 text-4xl font-black uppercase tracking-[0.12em] text-white">
-              Encuentra tu camiseta
-            </h2>
-          </div>
-
-          <Link
-            href="/catalogo"
-            className="text-sm font-black uppercase tracking-[0.2em] text-[#D4AF37] transition-colors hover:text-white"
-          >
-            Explorar todo →
-          </Link>
-        </div>
-
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
-          {equipos.map((equipo) => (
-            <Link
-              key={equipo}
-              href={`/catalogo?equipo=${encodeURIComponent(equipo)}`}
-              className="rounded-2xl border border-[#2E2E2E] bg-[#1E1E1E] px-4 py-6 text-center text-sm font-black uppercase tracking-[0.12em] text-white transition-all duration-300 hover:-translate-y-1 hover:border-[#CC1111] hover:bg-[#CC1111]/10"
-            >
-              {equipo}
-            </Link>
-          ))}
-        </div>
-      </section>
-
-      <section className="bg-[#1E1E1E]">
-        <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-8 px-4 py-14 text-center sm:flex-row sm:text-left">
-          <div>
-            <span className="text-sm font-black uppercase tracking-[0.25em] text-[#D4AF37]">
-              Catálogo conectado
-            </span>
-            <h2 className="mt-3 text-4xl font-black uppercase tracking-[0.12em] text-white">
-              Productos desde Supabase
-            </h2>
-            <p className="mt-3 max-w-xl text-[#A0A0A0]">
-              Revisa camisetas, precios, imágenes y stock cargados directamente
-              desde la base de datos.
-            </p>
-          </div>
-
-          <Link
-            href="/catalogo"
-            className="rounded-full bg-[#CC1111] px-8 py-4 text-sm font-black uppercase tracking-[0.2em] text-white transition-all duration-300 hover:-translate-y-1 hover:bg-[#e31818]"
-          >
-            Ir al catálogo
-          </Link>
-        </div>
-      </section>
-
-      <a
-        href="https://wa.me/573057510901?text=Hola! Quiero hacer un pedido en Pura Pasión"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="fixed bottom-5 right-5 z-50 rounded-full bg-[#25D366] px-5 py-4 text-sm font-black uppercase tracking-[0.15em] text-black shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:scale-105"
+      {/* ─── BENEFITS ──────────────────────────────────────────────────── */}
+      <section
+        className="border-t border-[#1A1A1A] py-12 px-6"
+        style={{ background: '#141414' }}
       >
-        WhatsApp
-      </a>
+        <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
+          {BENEFICIOS.map((b) => (
+            <div key={b.titulo} className="flex items-start gap-3">
+              <div className="shrink-0 mt-0.5" style={{ color: '#505050' }}>
+                {b.icon}
+              </div>
+              <div>
+                <p
+                  className="text-sm font-bold uppercase tracking-widest"
+                  style={{ ...FB, color: '#EFEFEF' }}
+                >
+                  {b.titulo}
+                </p>
+                <p
+                  className="text-xs mt-0.5"
+                  style={{ ...FB, color: '#505050' }}
+                >
+                  {b.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </main>
-  );
+  )
 }

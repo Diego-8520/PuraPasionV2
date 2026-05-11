@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Bebas_Neue, Barlow_Condensed } from 'next/font/google'
 import Navbar from '@/components/catalog/Navbar'
+import Footer from '@/components/Footer'
 import WhatsAppFloat from '@/components/catalogo/WhatsAppFloat'
 import './globals.css'
 
@@ -17,8 +18,9 @@ const barlowCondensed = Barlow_Condensed({
 })
 
 export const metadata: Metadata = {
-  title: 'Pura Pasión Fútbol Store | Cali, Colombia',
-  description: 'La camiseta que sientes, al precio que mereces.',
+  title: 'Pura Pasion Futbol Store | Cali, Colombia',
+  description:
+    'Camisetas de futbol, clubes y selecciones. Envios a toda Colombia.',
 }
 
 export default function RootLayout({
@@ -31,6 +33,7 @@ export default function RootLayout({
       <body className={`${bebasNeue.variable} ${barlowCondensed.variable}`}>
         <Navbar />
         {children}
+        <Footer />
         <WhatsAppFloat />
       </body>
     </html>

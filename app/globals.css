@@ -2,15 +2,33 @@
 
 @layer base {
   :root {
+    /* Brand */
     --negro: #0A0A0A;
-    --blanco: #F5F5F5;
-    --rojo: #CC1111;
-    --azul: #0B72B9;
-    --verde: #0D9A0D;
+    --blanco: #EFEFEF;
     --dorado: #D4AF37;
-    --gris-card: #1E1E1E;
-    --gris-borde: #2E2E2E;
-    --gris-texto: #A0A0A0;
+    --verde-wa: #25D366;
+
+    /* Red is reserved for scarcity alerts and discounts only */
+    --rojo: #CC1111;
+
+    /* Neutral system (zinc-based) */
+    --zinc-50: #F8F8F8;
+    --zinc-100: #EFEFEF;
+    --zinc-200: #DEDEDE;
+    --zinc-400: #A0A0A0;
+    --zinc-500: #787878;
+    --zinc-600: #606060;
+    --zinc-700: #3A3A3A;
+    --zinc-800: #282828;
+    --zinc-850: #1E1E1E;
+    --zinc-900: #141414;
+    --zinc-950: #0A0A0A;
+
+    --gris-card: #141414;
+    --gris-borde: #242424;
+    --gris-borde-hover: #3A3A3A;
+    --gris-texto: #787878;
+
     --font-display: var(--font-bebas);
     --font-body: var(--font-barlow);
   }
@@ -34,7 +52,7 @@
 
   h1, h2, h3, h4 {
     font-family: var(--font-display), sans-serif;
-    letter-spacing: 2px;
+    letter-spacing: 1.5px;
     text-transform: uppercase;
   }
 }

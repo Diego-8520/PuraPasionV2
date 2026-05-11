@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc *)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\DIEGO\\\\Documents\\\\Proyectos\\\\PuraPasionV2\\\\pura-pasion\" -Recurse -Force | Select-Object FullName | Sort-Object FullName | ForEach-Object { $_.FullName -replace [regex]::Escape\\(\"C:\\\\Users\\\\DIEGO\\\\Documents\\\\Proyectos\\\\PuraPasionV2\\\\pura-pasion\\\\\"\\), \"\" } | head -100)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\DIEGO\\\\Documents\\\\Proyectos\\\\PuraPasionV2\\\\pura-pasion\" -Recurse -Force | Select-Object FullName | Sort-Object FullName | Select-Object -First 150 | ForEach-Object { $_.FullName -replace [regex]::Escape\\(\"C:\\\\Users\\\\DIEGO\\\\Documents\\\\Proyectos\\\\PuraPasionV2\\\\pura-pasion\\\\\"\\), \"\" })",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\DIEGO\\\\Documents\\\\Proyectos\\\\PuraPasionV2\\\\pura-pasion\\\\public\" | ForEach-Object { $_.Name })"
     ]
   }
 }

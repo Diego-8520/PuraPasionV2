@@ -13,8 +13,8 @@ interface Props {
   producto: Producto;
 }
 
-const FONT_BEBAS = { fontFamily: "var(--font-bebas), sans-serif" };
-const FONT_BARLOW = { fontFamily: "var(--font-barlow), sans-serif" };
+const FD = { fontFamily: "var(--font-bebas), sans-serif" };
+const FB = { fontFamily: "var(--font-barlow), sans-serif" };
 
 export default function ProductCard({ producto }: Props) {
   const precio = getPrecioMinimo(producto);
@@ -35,12 +35,11 @@ export default function ProductCard({ producto }: Props) {
 
   return (
     <article
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#2E2E2E] bg-[#1E1E1E] transition-all duration-300 hover:-translate-y-1 hover:border-[#CC1111]/50 hover:shadow-[0_12px_48px_rgba(204,17,17,0.22)]"
-      style={{
-        opacity: agotado ? 0.75 : 1,
-      }}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#1E1E1E] bg-[#141414] transition-all duration-300 hover:border-[#333] hover:shadow-[0_8px_28px_rgba(0,0,0,0.45)]"
+      style={{ opacity: agotado ? 0.7 : 1 }}
     >
-      <div className="relative aspect-square overflow-hidden bg-[#151515]">
+      {/* ── IMAGE ── */}
+      <div className="relative aspect-square overflow-hidden bg-[#0E0E0E]">
         {imagen ? (
           <Image
             src={imagen}
@@ -48,49 +47,67 @@ export default function ProductCard({ producto }: Props) {
             fill
             unoptimized
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center">
-            <span className="text-7xl opacity-20">⚽</span>
+            <svg
+              width="52"
+              height="52"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="rgba(239,239,239,0.08)"
+              strokeWidth="0.75"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M6 2L2 6l2 2 2-2v12a2 2 0 002 2h8a2 2 0 002-2V6l2 2 2-2-4-4H6z" />
+              <path d="M9 2v3m6-3v3" />
+            </svg>
           </div>
         )}
 
+        {/* Sold out overlay */}
         {agotado && (
-          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/60">
+          <div className="absolute inset-0 z-20 flex items-center justify-center bg-black/55">
             <span
-              className="rounded-full border border-[#2E2E2E] bg-[#0A0A0A]/90 px-4 py-1.5 text-xs font-bold uppercase tracking-[3px] text-[#A0A0A0]"
-              style={FONT_BARLOW}
+              className="rounded-full border border-[#2A2A2A] bg-[#0A0A0A]/90 px-4 py-1.5 text-xs font-bold uppercase tracking-[3px]"
+              style={{ ...FB, color: "#606060" }}
             >
               Agotado
             </span>
           </div>
         )}
 
+        {/* Manual badge (gold) */}
         {producto.badge_manual && (
           <span
-            className="absolute left-3 top-3 z-10 rounded-full bg-[#D4AF37] px-2.5 py-1 text-xs font-bold uppercase tracking-widest text-[#0A0A0A]"
-            style={FONT_BARLOW}
+            className="absolute left-3 top-3 z-10 rounded-full px-2.5 py-1 text-xs font-bold uppercase tracking-widest"
+            style={{ ...FB, background: "#D4AF37", color: "#0A0A0A" }}
           >
             {producto.badge_manual}
           </span>
         )}
 
+        {/* Low stock badge — red is acceptable for scarcity */}
         {ultimasUnidades && (
           <span
             className="absolute right-3 top-3 z-10 rounded-full bg-[#CC1111] px-2.5 py-1 text-xs font-bold uppercase tracking-widest text-white"
-            style={FONT_BARLOW}
+            style={FB}
           >
-            ¡Últimas {stock}!
+            Ultimas {stock}
           </span>
         )}
       </div>
 
+      {/* ── INFO ── */}
       <div className="flex flex-1 flex-col gap-2 p-4">
+        {/* Team */}
         {producto.equipos && (
           <div className="flex items-center gap-1.5">
             {producto.equipos.escudo_url && (
-              <div className="relative h-5 w-5 shrink-0">
+              <div className="relative h-4 w-4 shrink-0">
                 <Image
                   src={producto.equipos.escudo_url}
                   alt={producto.equipos.nombre}
@@ -100,64 +117,61 @@ export default function ProductCard({ producto }: Props) {
                 />
               </div>
             )}
-
             <span
-              className="truncate text-xs font-semibold uppercase tracking-[2px] text-[#A0A0A0]"
-              style={FONT_BARLOW}
+              className="truncate text-xs font-semibold uppercase tracking-[2px]"
+              style={{ ...FB, color: "#606060" }}
             >
               {producto.equipos.nombre}
             </span>
           </div>
         )}
 
+        {/* Name */}
         <h3
-          className="line-clamp-2 text-xl leading-tight text-[#F5F5F5]"
-          style={{
-            ...FONT_BEBAS,
-            letterSpacing: "1.5px",
-          }}
+          className="line-clamp-2 leading-tight text-[#EFEFEF]"
+          style={{ ...FD, fontSize: "20px", letterSpacing: "1px" }}
         >
           {producto.nombre}
         </h3>
 
+        {/* Season / quality */}
         <div
-          className="flex items-center gap-2 text-xs text-[#A0A0A0]"
-          style={FONT_BARLOW}
+          className="flex items-center gap-2 text-xs"
+          style={{ ...FB, color: "#505050" }}
         >
           {producto.temporada && <span>{producto.temporada}</span>}
-
           {producto.temporada && producto.calidades && (
-            <span className="text-[#2E2E2E]">•</span>
+            <span style={{ color: "#252525" }}>·</span>
           )}
-
           {producto.calidades && <span>{producto.calidades.nombre}</span>}
         </div>
 
-        <div className="mt-auto flex items-end justify-between gap-2 border-t border-[#2E2E2E] pt-3">
+        {/* Price row */}
+        <div className="mt-auto flex items-end justify-between gap-2 border-t border-[#1A1A1A] pt-3">
           <span
-            className="text-2xl leading-none text-[#F5F5F5]"
-            style={FONT_BEBAS}
+            className="leading-none text-[#EFEFEF]"
+            style={{ ...FD, fontSize: "22px" }}
           >
             {precioFormateado}
           </span>
-
           {stock > 0 && (
             <span
-              className="shrink-0 text-xs text-[#A0A0A0]"
-              style={FONT_BARLOW}
+              className="shrink-0 text-xs"
+              style={{ ...FB, color: "#505050" }}
             >
               {stock} disp.
             </span>
           )}
         </div>
 
+        {/* Actions */}
         <div className="mt-2 flex gap-2">
           <button
             disabled={agotado}
-            className="flex-1 rounded-xl bg-[#CC1111] py-2.5 text-xs font-bold uppercase tracking-widest text-white transition-all duration-200 active:scale-[0.97] disabled:cursor-not-allowed disabled:bg-[#2E2E2E] disabled:text-[#A0A0A0]"
-            style={FONT_BARLOW}
+            className="flex-1 rounded-xl border border-[#2A2A2A] bg-transparent py-2.5 text-xs font-bold uppercase tracking-widest text-[#EFEFEF] transition-all duration-200 hover:bg-[#EFEFEF] hover:text-[#0A0A0A] hover:border-[#EFEFEF] active:scale-[0.97] disabled:cursor-not-allowed disabled:border-[#1A1A1A] disabled:text-[#404040] disabled:hover:bg-transparent disabled:hover:text-[#404040] disabled:hover:border-[#1A1A1A]"
+            style={FB}
           >
-            {agotado ? "Agotado" : "Agregar"}
+            {agotado ? "Agotado" : "Ver producto"}
           </button>
 
           <a
@@ -165,11 +179,14 @@ export default function ProductCard({ producto }: Props) {
             target={agotado ? undefined : "_blank"}
             rel="noopener noreferrer"
             aria-label="Pedir por WhatsApp"
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#25D366] text-white transition-all duration-200 active:scale-[0.97]"
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl transition-all duration-200 active:scale-[0.97]"
             style={{
               pointerEvents: agotado ? "none" : "auto",
-              background: agotado ? "#2E2E2E" : "#25D366",
-              color: agotado ? "#A0A0A0" : "#fff",
+              background: agotado ? "#1A1A1A" : "rgba(37,211,102,0.12)",
+              color: agotado ? "#404040" : "#25D366",
+              border: agotado
+                ? "1px solid #1A1A1A"
+                : "1px solid rgba(37,211,102,0.25)",
             }}
           >
             <WAIcon />
@@ -183,8 +200,8 @@ export default function ProductCard({ producto }: Props) {
 function WAIcon() {
   return (
     <svg
-      width="18"
-      height="18"
+      width="17"
+      height="17"
       viewBox="0 0 24 24"
       fill="currentColor"
       aria-hidden="true"

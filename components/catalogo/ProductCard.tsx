@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import type { Producto } from "@/types/product";
 import {
   getPrecioMinimo,
@@ -166,13 +167,23 @@ export default function ProductCard({ producto }: Props) {
 
         {/* Actions */}
         <div className="mt-2 flex gap-2">
-          <button
-            disabled={agotado}
-            className="flex-1 rounded-xl border border-[#2A2A2A] bg-transparent py-2.5 text-xs font-bold uppercase tracking-widest text-[#EFEFEF] transition-all duration-200 hover:bg-[#EFEFEF] hover:text-[#0A0A0A] hover:border-[#EFEFEF] active:scale-[0.97] disabled:cursor-not-allowed disabled:border-[#1A1A1A] disabled:text-[#404040] disabled:hover:bg-transparent disabled:hover:text-[#404040] disabled:hover:border-[#1A1A1A]"
-            style={FB}
-          >
-            {agotado ? "Agotado" : "Ver producto"}
-          </button>
+          {agotado ? (
+            <button
+              disabled
+              className="flex-1 rounded-xl border border-[#1A1A1A] bg-transparent py-2.5 text-xs font-bold uppercase tracking-widest text-[#404040] cursor-not-allowed"
+              style={FB}
+            >
+              Agotado
+            </button>
+          ) : (
+            <Link
+              href={`/producto/${producto.id}`}
+              className="flex flex-1 items-center justify-center rounded-xl border border-[#2A2A2A] bg-transparent py-2.5 text-xs font-bold uppercase tracking-widest text-[#EFEFEF] transition-all duration-200 hover:bg-[#EFEFEF] hover:text-[#0A0A0A] hover:border-[#EFEFEF] active:scale-[0.97]"
+              style={FB}
+            >
+              Ver producto
+            </Link>
+          )}
 
           <a
             href={agotado ? undefined : whatsappUrl}

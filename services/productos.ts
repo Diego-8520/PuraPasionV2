@@ -45,3 +45,59 @@ export function getWhatsappUrl(producto: Producto): string {
   const text = encodeURIComponent(`Hola! Quiero pedir: ${producto.nombre}`);
   return `https://wa.me/573057510901?text=${text}`;
 }
+
+const PRODUCTO_SELECT = `
+  id,
+  nombre,
+  descripcion,
+  temporada,
+  badge_manual,
+  activo,
+  categorias (id, nombre),
+  equipos (id, nombre, escudo_url, tipo),
+  calidades (id, nombre),
+  imagenes (id, url, orden),
+  tallas_stock (id, talla, cantidad, precio)
+`;
+
+export async function getProductoById(id: string): Promise<Producto | null> {
+  const { data } = await supabase
+    .from("productos")
+    .select(PRODUCTO_SELECT)
+    .eq("id", id)
+    .eq("activo", true)
+    .maybeSingle();
+
+  return data as unknown as Producto | null;
+}
+
+export async function getProductosRelacionados(
+  productoId: string,
+  equipoId: string | null,
+  categoriaId: string | null,
+  limit = 4
+): Promise<Producto[]> {
+  if (equipoId) {
+    const { data } = await supabase
+      .from("productos")
+      .select(PRODUCTO_SELECT)
+      .eq("activo", true)
+      .neq("id", productoId)
+      .eq("equipo_id", equipoId)
+      .limit(limit);
+    if (data && data.length > 0) return data as unknown as Producto[];
+  }
+
+  if (categoriaId) {
+    const { data } = await supabase
+      .from("productos")
+      .select(PRODUCTO_SELECT)
+      .eq("activo", true)
+      .neq("id", productoId)
+      .eq("categoria_id", categoriaId)
+      .limit(limit);
+    return (data ?? []) as unknown as Producto[];
+  }
+
+  return [];
+}

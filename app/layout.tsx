@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import { Bebas_Neue, Barlow_Condensed } from 'next/font/google'
 import Navbar from '@/components/catalog/Navbar'
+import WhatsAppFloat from '@/components/catalogo/WhatsAppFloat'
 import './globals.css'
 
 const bebasNeue = Bebas_Neue({
@@ -30,6 +31,7 @@ export default function RootLayout({
       <body className={`${bebasNeue.variable} ${barlowCondensed.variable}`}>
         <Navbar />
         {children}
+        <WhatsAppFloat />
       </body>
     </html>
   )

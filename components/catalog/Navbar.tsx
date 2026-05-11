@@ -10,6 +10,7 @@ const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=Hola!%20Quiero%20ver
 
 const navItems = [
   { label: 'Inicio', href: '/' },
+  { label: 'Catálogo', href: '/catalogo' },
   { label: 'Equipos', href: '/equipos' },
   { label: 'Ofertas', href: '/ofertas' },
   { label: 'Novedades', href: '/novedades' },
@@ -18,9 +19,10 @@ const navItems = [
 
 const tickerItems = [
   '🔥 Envios a toda Colombia',
+  '📦 Pago contraentrega',
   '⚽ Pide por WhatsApp ya',
   '🏆 Productos de calidad garantizada',
-  '⚡ Entrega rapida en Cali',
+  '⚡ Entrega inmediata en Cali',
 ]
 
 export default function Navbar() {

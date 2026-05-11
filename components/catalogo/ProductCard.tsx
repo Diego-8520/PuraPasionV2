@@ -36,7 +36,7 @@ export default function ProductCard({ producto }: Props) {
 
   return (
     <article
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#1E1E1E] bg-[#141414] transition-all duration-300 hover:border-[#333] hover:shadow-[0_8px_28px_rgba(0,0,0,0.45)]"
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-[#1E1E1E] bg-[#141414] transition-all duration-300 hover:border-[#2A2A2A] hover:shadow-[0_12px_40px_rgba(0,0,0,0.55)]"
       style={{ opacity: agotado ? 0.7 : 1 }}
     >
       {/* ── IMAGE ── */}

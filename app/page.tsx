@@ -84,13 +84,21 @@ export default async function Home() {
 
       {/* ─── HERO ──────────────────────────────────────────────────────── */}
       <section className="relative border-b border-[#1A1A1A] overflow-hidden">
+        {/* Grid pattern */}
         <div
           className="absolute inset-0 pointer-events-none"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px)',
+              'linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px)',
             backgroundSize: '52px 52px',
             maskImage: 'linear-gradient(to bottom, black 55%, transparent)',
+          }}
+        />
+        {/* Gold ambient glow — hero image side */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'radial-gradient(ellipse at 78% 35%, rgba(212, 175, 55, 0.06) 0%, transparent 55%)',
           }}
         />
 
@@ -99,12 +107,15 @@ export default async function Home() {
 
             {/* Left */}
             <div className="flex flex-col justify-center">
-              <p
-                className="text-xs font-bold tracking-[4px] uppercase mb-6"
-                style={{ ...FB, color: '#505050' }}
-              >
-                Pura Pasión Fútbol Store — Cali, Colombia
-              </p>
+              <div className="flex items-center gap-3 mb-6">
+                <span style={{ display: 'inline-block', width: '28px', height: '2px', background: '#D4AF37', borderRadius: '1px', flexShrink: 0 }} />
+                <p
+                  className="text-xs font-bold tracking-[4px] uppercase"
+                  style={{ ...FB, color: '#686868' }}
+                >
+                  Pura Pasión — Cali, Colombia
+                </p>
+              </div>
 
               <h1
                 className="text-[#EFEFEF] leading-[0.88]"
@@ -140,10 +151,11 @@ export default async function Home() {
 
                 <Link
                   href="/catalogo"
-                  className="inline-flex items-center px-7 py-3.5 rounded-full text-sm font-bold tracking-widest uppercase border border-[#2A2A2A] hover:border-[#444] transition-all duration-200 active:scale-[0.98]"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full text-sm font-bold tracking-widest uppercase border border-[#2A2A2A] hover:border-[#D4AF37]/30 hover:text-[#D4AF37] transition-all duration-200 active:scale-[0.98]"
                   style={{ ...FB, color: '#EFEFEF' }}
                 >
                   Ver novedades
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                 </Link>
               </div>
 
@@ -165,6 +177,7 @@ export default async function Home() {
                           fontSize: '28px',
                           letterSpacing: '1px',
                           lineHeight: 1,
+                          color: '#D4AF37',
                         }}
                       >
                         {s.val}
@@ -190,7 +203,8 @@ export default async function Home() {
                     width: '400px',
                     height: '520px',
                     borderRadius: '24px',
-                    border: '1px solid #1E1E1E',
+                    border: '1px solid rgba(212, 175, 55, 0.18)',
+                    boxShadow: '0 24px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(0,0,0,0.5)',
                   }}
                 >
                   <Image
@@ -327,7 +341,7 @@ export default async function Home() {
               <Link
                 key={cat.id}
                 href="/catalogo"
-                className="px-5 py-2.5 rounded-full text-sm font-bold tracking-widest uppercase border border-[#242424] hover:border-[#3A3A3A] hover:bg-[#141414] transition-all duration-200"
+                className="px-5 py-2.5 rounded-full text-sm font-bold tracking-widest uppercase border border-[#242424] hover:border-[#3A3A3A] hover:bg-[#141414] hover:shadow-[0_2px_12px_rgba(0,0,0,0.3)] transition-all duration-200"
                 style={{ ...FB, color: '#EFEFEF' }}
               >
                 {cat.nombre}
@@ -379,8 +393,11 @@ export default async function Home() {
 
       {/* ─── BRAND BANNER ──────────────────────────────────────────────── */}
       <section
-        className="border-y border-[#1A1A1A] py-20 px-6"
-        style={{ background: '#141414' }}
+        className="border-y border-[#1A1A1A] py-20 px-6 relative overflow-hidden"
+        style={{
+          background: '#141414',
+          backgroundImage: 'radial-gradient(ellipse at 65% 60%, rgba(212, 175, 55, 0.05) 0%, transparent 55%)',
+        }}
       >
         <div className="max-w-5xl mx-auto">
           <p
@@ -499,7 +516,7 @@ export default async function Home() {
                 <Link
                   key={equipo}
                   href={`/catalogo?equipo=${encodeURIComponent(equipo)}`}
-                  className="rounded-2xl border border-[#1E1E1E] bg-[#141414] px-4 py-6 text-center text-xs font-bold uppercase tracking-widest hover:border-[#3A3A3A] hover:bg-[#1A1A1A] transition-all duration-200"
+                  className="rounded-2xl border border-[#1E1E1E] bg-[#141414] px-4 py-6 text-center text-xs font-bold uppercase tracking-widest hover:border-[#2E2E2E] hover:bg-[#181818] hover:shadow-[0_4px_20px_rgba(0,0,0,0.4)] transition-all duration-200"
                   style={{ ...FB, color: '#EFEFEF' }}
                 >
                   {equipo}
@@ -517,9 +534,14 @@ export default async function Home() {
       >
         <div className="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-8">
           {BENEFICIOS.map((b) => (
-            <div key={b.titulo} className="flex items-start gap-3">
-              <div className="shrink-0 mt-0.5" style={{ color: '#505050' }}>
-                {b.icon}
+            <div key={b.titulo} className="flex items-start gap-4">
+              <div className="shrink-0">
+                <div
+                  className="flex items-center justify-center w-10 h-10 rounded-xl"
+                  style={{ background: '#181818', border: '1px solid #242424', color: '#686868' }}
+                >
+                  {b.icon}
+                </div>
               </div>
               <div>
                 <p
@@ -529,7 +551,7 @@ export default async function Home() {
                   {b.titulo}
                 </p>
                 <p
-                  className="text-xs mt-0.5"
+                  className="text-xs mt-1"
                   style={{ ...FB, color: '#505050' }}
                 >
                   {b.desc}

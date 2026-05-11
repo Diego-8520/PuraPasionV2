@@ -9,10 +9,8 @@ const FB = { fontFamily: 'var(--font-barlow), sans-serif' }
 
 const NAV = [
   { label: 'Catalogo', href: '/catalogo' },
-  { label: 'Clubes', href: '/catalogo' },
-  { label: 'Selecciones', href: '/catalogo' },
-  { label: 'Retro', href: '/catalogo' },
   { label: 'Ofertas', href: '/catalogo' },
+  { label: 'Novedades', href: '/catalogo' },
   { label: 'Contacto', href: '/contacto' },
 ]
 
@@ -25,7 +23,7 @@ const INFO = [
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#080808', borderTop: '1px solid #181818' }}>
+    <footer style={{ background: 'linear-gradient(180deg, #0A0A0A 0%, #080808 100%)', borderTop: '1px solid rgba(212, 175, 55, 0.12)' }}>
       <div className="max-w-7xl mx-auto px-6 py-16 grid grid-cols-1 md:grid-cols-[1fr_auto_auto] gap-12">
 
         {/* Brand */}
@@ -129,8 +127,8 @@ export default function Footer() {
         className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row justify-between gap-2"
         style={{ borderTop: '1px solid #141414' }}
       >
-        <p style={{ ...FB, color: '#303030', fontSize: '12px' }}>
-          &copy; 2024 Pura Pasion Futbol Store. Cali, Colombia.
+        <p style={{ ...FB, color: '#383838', fontSize: '12px' }}>
+          &copy; 2025 Pura Pasion Futbol Store. Cali, Colombia.
         </p>
         <p style={{ ...FB, color: '#303030', fontSize: '12px' }}>
           Pagos y envios seguros en toda Colombia

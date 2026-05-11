@@ -22,6 +22,11 @@ export const metadata: Metadata = {
   title: "Pura Pasion Futbol Store | Cali, Colombia",
   description:
     "Camisetas de futbol, clubes y selecciones. Envios a toda Colombia.",
+  icons: {
+    icon: "/calcomania rojo.png",
+    shortcut: "/calcomania rojo.png",
+    apple: "/calcomania rojo.png",
+  },
 };
 
 export default function RootLayout({

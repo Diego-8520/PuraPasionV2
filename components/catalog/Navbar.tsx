@@ -18,7 +18,7 @@ const navItems = [
 ];
 
 const tickerItems = [
-  { icon: "🔥", label: " ◆ Envíos a toda Colombia" },
+  { icon: "🔥", label: "Envíos a toda Colombia" },
   { icon: "⚡", label: "Nuevas camisetas disponibles" },
   { icon: "👑", label: "Calidad premium garantizada" },
   { icon: "💬", label: "Pide fácil por WhatsApp" },

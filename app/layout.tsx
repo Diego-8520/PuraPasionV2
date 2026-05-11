@@ -3,6 +3,7 @@ import { Bebas_Neue, Barlow_Condensed } from "next/font/google";
 import Navbar from "@/components/catalog/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloat from "@/components/catalogo/WhatsAppFloat";
+import { CartProvider } from "@/context/CartContext";
 import "./globals.css";
 
 const bebasNeue = Bebas_Neue({
@@ -31,10 +32,12 @@ export default function RootLayout({
   return (
     <html lang="es" data-scroll-behavior="smooth">
       <body className={`${bebasNeue.variable} ${barlowCondensed.variable}`}>
-        <Navbar />
-        {children}
-        <Footer />
-        <WhatsAppFloat />
+        <CartProvider>
+          <Navbar />
+          {children}
+          <Footer />
+          <WhatsAppFloat />
+        </CartProvider>
       </body>
     </html>
   );

@@ -208,6 +208,25 @@
   /* visible text */
 }
 
+/* ── CART BADGE ── */
+.cartBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #CC1111;
+  color: #fff;
+  font-family: var(--font-barlow), sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 18px;
+  text-align: center;
+  pointer-events: none;
+}
+
 /* ── HAMBURGER ── */
 .menuButton {
   display: none;

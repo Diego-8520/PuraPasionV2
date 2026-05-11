@@ -19,7 +19,9 @@ export async function getProductos(): Promise<Producto[]> {
     `)
     .eq('activo', true)
     .order('creado_en', { ascending: false })
+    .order('orden', { foreignTable: 'imagenes', ascending: true })
 
+  console.log('Productos desde Supabase:', data)
   if (error) throw new Error(error.message)
   return (data ?? []) as unknown as Producto[]
 }
